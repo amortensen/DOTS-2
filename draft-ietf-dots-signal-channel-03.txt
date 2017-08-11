@@ -84,7 +84,7 @@ Table of Contents
      5.3.  Mitigation Request  . . . . . . . . . . . . . . . . . . .  11
        5.3.1.  Requesting mitigation . . . . . . . . . . . . . . . .  12
        5.3.2.  Withdraw a DOTS Signal  . . . . . . . . . . . . . . .  17
-       5.3.3.  Retrieving a DOTS Signal  . . . . . . . . . . . . . .  19
+       5.3.3.  Retrieving a DOTS Signal  . . . . . . . . . . . . . .  18
        5.3.4.  Efficacy Update from DOTS Client  . . . . . . . . . .  23
      5.4.  DOTS Signal Channel Session Configuration . . . . . . . .  25
        5.4.1.  Discover Acceptable Configuration Parameters  . . . .  26
@@ -994,14 +994,14 @@ Internet-Draft             DOTS Signal Channel               August 2017
    financial relationship between the DOTS client and server domains,
    the DOTS client ceases incurring cost at this point.
 
-   If UDP is used as transport, CoAP requests may arrive out-of-order.
-   For example, the DOTS client may send a PUT request to convey
-   efficacy update to the DOTS server followed by a DELETE request to
-   withdraw the mitigation request, but DELETE request arrives at the
-   DOTS server before the PUT request.  To handle such scenarios, the
-   DOTS server has to maintain the mitigation-id for certain duration
-   after the mitigation request is deleted to detect out-of-order
-   delivery and silently ignore the PUT request.
+5.3.3.  Retrieving a DOTS Signal
+
+   A GET request is used to retrieve information and status of a DOTS
+   signal from a DOTS server (Figure 8).  If the DOTS server does not
+   find the mitigation-id parameter value conveyed in the GET request in
+   its configuration data, then it responds with a 4.04 (Not Found)
+   error response code.  The 'c' (content) parameter and its permitted
+
 
 
 
@@ -1010,13 +1010,6 @@ Reddy, et al.           Expires February 11, 2018              [Page 18]
 Internet-Draft             DOTS Signal Channel               August 2017
 
 
-5.3.3.  Retrieving a DOTS Signal
-
-   A GET request is used to retrieve information and status of a DOTS
-   signal from a DOTS server (Figure 8).  If the DOTS server does not
-   find the mitigation-id parameter value conveyed in the GET request in
-   its configuration data, then it responds with a 4.04 (Not Found)
-   error response code.  The 'c' (content) parameter and its permitted
    values defined in [I-D.ietf-core-comi] can be used to retrieve non-
    configuration data or configuration data or both.
 
@@ -1055,6 +1048,13 @@ Internet-Draft             DOTS Signal Channel               August 2017
    Figure 9 shows a response example of all the active mitigation
    requests associated with the DOTS client on the DOTS server and the
    mitigation status of each mitigation request.
+
+
+
+
+
+
+
 
 
 
@@ -1245,17 +1245,17 @@ Internet-Draft             DOTS Signal Channel               August 2017
    efficacy update to the DOTS server.  The PUT request MUST include all
    the parameters used in the PUT request to convey the DOTS signal
    (Section 5.3.1).  The If-Match Option (Section 5.10.8.1 of [RFC7252])
-   is used to make the PUT request conditional on the current existence
-   of the mitigation request.
-
-
-
-
-
-
-
-
-
+   with an empty value is used to make the PUT request conditional on
+   the current existence of the mitigation request.  If UDP is used as
+   transport, CoAP requests may arrive out-of-order.  For example, the
+   DOTS client may send a PUT request to convey efficacy update to the
+   DOTS server followed by a DELETE request to withdraw the mitigation
+   request, but DELETE request arrives at the DOTS server before the PUT
+   request.  To handle out-of-order delivery of requests, the DOTS
+   server checks if there is a If-Match option in the PUT request and
+   the mitigation-id in the request matches any existing mitigation
+   requests from the DOTS client, and if no match is found then the PUT
+   request is silently ignored.
 
 
 
@@ -1360,12 +1360,9 @@ Internet-Draft             DOTS Signal Channel               August 2017
    The DOTS server indicates the result of processing the PUT request
    using CoAP response codes.  The response code 2.04 (Changed) will be
    returned in the response if the DOTS server has accepted the
-   mitigation efficacy update.  If the DOTS server does not find the
-   mitigation-id parameter value conveyed in the PUT request in its
-   configuration data then the server MAY accept the mitigation request
-   and will try to mitigate the attack, resulting in a 2.01 (Created)
-   Response Code.  The 5.xx response codes are returned if the DOTS
-   server has erred or is incapable of performing the mitigation.
+   mitigation efficacy update.  The 5.xx response codes are returned if
+   the DOTS server has erred or is incapable of performing the
+   mitigation.
 
 5.4.  DOTS Signal Channel Session Configuration
 
@@ -1394,6 +1391,9 @@ Internet-Draft             DOTS Signal Channel               August 2017
    by marking them as Confirmable (CON) messages.  The DOTS server can
    either piggyback the response in the acknowledgement message or if
    the DOTS server is not able to respond immediately to a request
+   carried in a Confirmable message, it simply responds with an Empty
+   Acknowledgement message so that the DOTS client can stop
+   retransmitting the request.  Empty Acknowledgement message is
 
 
 
@@ -1402,9 +1402,6 @@ Reddy, et al.           Expires February 11, 2018              [Page 25]
 Internet-Draft             DOTS Signal Channel               August 2017
 
 
-   carried in a Confirmable message, it simply responds with an Empty
-   Acknowledgement message so that the DOTS client can stop
-   retransmitting the request.  Empty Acknowledgement message is
    explained in Section 2.2 of [RFC7252].  When the response is ready,
    the server sends it in a new Confirmable message which then in turn
    needs to be acknowledged by the DOTS client (see Sections 5.2.1 and
@@ -1449,6 +1446,9 @@ Internet-Draft             DOTS Signal Channel               August 2017
       }
 
                        Figure 13: GET response body
+
+
+
 
 
 
