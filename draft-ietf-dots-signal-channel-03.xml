@@ -672,10 +672,9 @@ module ietf-dots-signal-config {
               of ports (e.g., 1024-65535). This is an optional attribute.</t>
 
               <t hangText="target-protocol:">A list of protocols under attack.
-              Internet Protocol numbers. Values are taken from the IANA
-              protocol registry [<xref target="proto_numbers"></xref>]. The
-              value 0 has a special meaning for 'all protocols'. This is an
-              optional attribute.</t>
+              Values are taken from the IANA protocol registry [<xref
+              target="proto_numbers"></xref>]. The value 0 has a special
+              meaning for 'all protocols'. This is an optional attribute.</t>
 
               <t hangText="fqdn: ">A list of Fully Qualified Domain Names.
               Fully Qualified Domain Name (FQDN) is the full name of a system,
@@ -1111,11 +1110,11 @@ a1                                      # map(1)
           DOTS client may send a PUT request to convey efficacy update to the
           DOTS server followed by a DELETE request to withdraw the mitigation
           request, but DELETE request arrives at the DOTS server before the
-          PUT request. To handle out-of-order delivery of requests, the DOTS
-          server checks if there is a If-Match option in the PUT request and
-          the mitigation-id in the request matches any existing mitigation
-          requests from the DOTS client, and if no match is found then the PUT
-          request is silently ignored.</t>
+          PUT request. To handle out-of-order delivery of requests, if an
+          If-Match option is present in the PUT request and the mitigation-id
+          in the request matches any existing mitigation requests from the
+          DOTS client then the request is processed, and if no match is found
+          then the PUT request is silently ignored.</t>
 
           <figure anchor="Figure7" title="Efficacy Update">
             <artwork align="left"><![CDATA[   Header: PUT (Code=0.03)
@@ -1377,9 +1376,15 @@ a1                                      # map(1)
 
           <t>The DOTS server indicates the result of processing the PUT
           request using CoAP response codes. The CoAP response will include
-          the CBOR body received in the request. Response code 2.01 (Created)
-          will be returned in the response if the DOTS server has accepted the
-          configuration parameters. If the request is missing one or more
+          the CBOR body received in the request. If the DOTS server finds the
+          session parameter value conveyed in the PUT request in its
+          configuration data and if the DOTS server has accepted the updated
+          configuration parameters then the a 2.04 (Changed) response will be
+          returned in the response. If the DOTS server does not find the
+          session-d parameter value conveyed in the PUT request in its
+          configuration data and if the DOTS server has accepted the
+          configuration parameters then a response code 2.01 (Created) will be
+          returned in the response. If the request is missing one or more
           mandatory attributes then 4.00 (Bad Request) will be returned in the
           response or if the request contains invalid or unknown parameters
           then 4.02 (Invalid query) will be returned in the response. Response
@@ -1389,7 +1394,7 @@ a1                                      # map(1)
           to the DOTS server. The DOTS server in the error response conveys
           the minimum and maximum attribute values acceptable by the DOTS
           server. The DOTS client can re-try and send the PUT request with
-          updated attribute values acceptable to the DOTS server.</t>
+          updated attribute values acceptable to the DOTS server. </t>
 
           <t><figure anchor="Figure17" title="Error response body">
               <artwork align="left"><![CDATA[  Content-Format: "application/cbor"

@@ -94,7 +94,7 @@ Table of Contents
      5.5.  Redirected Signaling  . . . . . . . . . . . . . . . . . .  31
      5.6.  Heartbeat Mechanism . . . . . . . . . . . . . . . . . . .  32
    6.  Mapping parameters to CBOR  . . . . . . . . . . . . . . . . .  33
-   7.  (D)TLS Protocol Profile and Performance considerations  . . .  33
+   7.  (D)TLS Protocol Profile and Performance considerations  . . .  34
      7.1.  MTU and Fragmentation Issues  . . . . . . . . . . . . . .  34
    8.  (D)TLS 1.3 considerations . . . . . . . . . . . . . . . . . .  35
    9.  Mutual Authentication of DOTS Agents & Authorization of DOTS
@@ -750,10 +750,10 @@ Internet-Draft             DOTS Signal Channel               August 2017
       port.  For TCP, UDP, SCTP, or DCCP: the range of ports (e.g.,
       1024-65535).  This is an optional attribute.
 
-   target-protocol:  A list of protocols under attack.  Internet
-      Protocol numbers.  Values are taken from the IANA protocol
-      registry [[proto_numbers]].  The value 0 has a special meaning for
-      'all protocols'.  This is an optional attribute.
+   target-protocol:  A list of protocols under attack.  Values are taken
+      from the IANA protocol registry [[proto_numbers]].  The value 0
+      has a special meaning for 'all protocols'.  This is an optional
+      attribute.
 
    fqdn:   A list of Fully Qualified Domain Names.  Fully Qualified
       Domain Name (FQDN) is the full name of a system, rather than just
@@ -1251,10 +1251,10 @@ Internet-Draft             DOTS Signal Channel               August 2017
    DOTS client may send a PUT request to convey efficacy update to the
    DOTS server followed by a DELETE request to withdraw the mitigation
    request, but DELETE request arrives at the DOTS server before the PUT
-   request.  To handle out-of-order delivery of requests, the DOTS
-   server checks if there is a If-Match option in the PUT request and
-   the mitigation-id in the request matches any existing mitigation
-   requests from the DOTS client, and if no match is found then the PUT
+   request.  To handle out-of-order delivery of requests, if an If-Match
+   option is present in the PUT request and the mitigation-id in the
+   request matches any existing mitigation requests from the DOTS client
+   then the request is processed, and if no match is found then the PUT
    request is silently ignored.
 
 
@@ -1591,29 +1591,29 @@ Internet-Draft             DOTS Signal Channel               August 2017
 
    The DOTS server indicates the result of processing the PUT request
    using CoAP response codes.  The CoAP response will include the CBOR
-   body received in the request.  Response code 2.01 (Created) will be
-   returned in the response if the DOTS server has accepted the
-   configuration parameters.  If the request is missing one or more
-   mandatory attributes then 4.00 (Bad Request) will be returned in the
-   response or if the request contains invalid or unknown parameters
-   then 4.02 (Invalid query) will be returned in the response.  Response
-   code 4.22 (Unprocessable Entity) will be returned in the response if
-   any of the heartbeat-timeout, max-retransmit, target-protocol, ack-
-   timeout and ack-random-factor attribute values is not acceptable to
-   the DOTS server.  The DOTS server in the error response conveys the
-   minimum and maximum attribute values acceptable by the DOTS server.
-   The DOTS client can re-try and send the PUT request with updated
-   attribute values acceptable to the DOTS server.
+   body received in the request.  If the DOTS server finds the session
+   parameter value conveyed in the PUT request in its configuration data
+   and if the DOTS server has accepted the updated configuration
+   parameters then the a 2.04 (Changed) response will be returned in the
+   response.  If the DOTS server does not find the session-d parameter
+   value conveyed in the PUT request in its configuration data and if
+   the DOTS server has accepted the configuration parameters then a
+   response code 2.01 (Created) will be returned in the response.  If
+   the request is missing one or more mandatory attributes then 4.00
+   (Bad Request) will be returned in the response or if the request
+   contains invalid or unknown parameters then 4.02 (Invalid query) will
+   be returned in the response.  Response code 4.22 (Unprocessable
+   Entity) will be returned in the response if any of the heartbeat-
+   timeout, max-retransmit, target-protocol, ack-timeout and ack-random-
+   factor attribute values is not acceptable to the DOTS server.  The
+   DOTS server in the error response conveys the minimum and maximum
+   attribute values acceptable by the DOTS server.  The DOTS client can
+   re-try and send the PUT request with updated attribute values
+   acceptable to the DOTS server.
 
-     Content-Format: "application/cbor"
-     {
-        "heartbeat-timeout": {"MinValue": 15, "MaxValue" : 60},
-        "max-retransmit": {"MinValue": 3, "MaxValue" : 15},
-        "ack-timeout": {"MinValue": 1, "MaxValue" : 30},
-        "ack-random-factor": {"MinValue": 1.0, "MaxValue" : 4.0}
-     }
 
-                      Figure 16: Error response body
+
+
 
 
 
@@ -1625,6 +1625,16 @@ Reddy, et al.           Expires February 11, 2018              [Page 29]
 
 Internet-Draft             DOTS Signal Channel               August 2017
 
+
+     Content-Format: "application/cbor"
+     {
+        "heartbeat-timeout": {"MinValue": 15, "MaxValue" : 60},
+        "max-retransmit": {"MinValue": 3, "MaxValue" : 15},
+        "ack-timeout": {"MinValue": 1, "MaxValue" : 30},
+        "ack-random-factor": {"MinValue": 1.0, "MaxValue" : 4.0}
+     }
+
+                      Figure 16: Error response body
 
 5.4.3.  Delete DOTS Signal Channel Session Configuration
 
@@ -1658,6 +1668,20 @@ Internet-Draft             DOTS Signal Channel               August 2017
    session configuration data from a DOTS server.  Figure 18 shows how
    to retrieve the DOTS signal channel session configuration data.
 
+
+
+
+
+
+
+
+
+
+Reddy, et al.           Expires February 11, 2018              [Page 30]
+
+Internet-Draft             DOTS Signal Channel               August 2017
+
+
      Header: GET (Code=0.01)
      Uri-Host: "host"
      Uri-Path: "version"
@@ -1671,16 +1695,6 @@ Internet-Draft             DOTS Signal Channel               August 2017
      }
 
                  Figure 18: GET to retrieve configuration
-
-
-
-
-
-
-Reddy, et al.           Expires February 11, 2018              [Page 30]
-
-Internet-Draft             DOTS Signal Channel               August 2017
-
 
 5.5.  Redirected Signaling
 
@@ -1717,26 +1731,16 @@ Internet-Draft             DOTS Signal Channel               August 2017
 
    ttl:  Time to live (TTL) represented as an integer number of seconds.
 
-   Figure 20 shows a 3.00 response example to convey the DOTS alternate
-   server www.example-alt.com, its IP addresses 2001:db8:6401::1 and
-   2001:db8:6401::2, and TTL values 3600 and 1800.
-
-
-
-
-
-
-
-
-
-
-
 
 
 Reddy, et al.           Expires February 11, 2018              [Page 31]
 
 Internet-Draft             DOTS Signal Channel               August 2017
 
+
+   Figure 20 shows a 3.00 response example to convey the DOTS alternate
+   server www.example-alt.com, its IP addresses 2001:db8:6401::1 and
+   2001:db8:6401::2, and TTL values 3600 and 1800.
 
    {
 
@@ -1782,10 +1786,6 @@ Internet-Draft             DOTS Signal Channel               August 2017
    ping" mechanism (Section 4.2 in [RFC7252]).  The DOTS agent sends an
    Empty Confirmable message and the peer DOTS agent will respond by
    sending an Reset message.  In DOTS over TCP, heartbeat messages can
-   be exchanged between the DOTS agents using the Ping and Pong messages
-   (Section 4.4 in [I-D.ietf-core-coap-tcp-tls]).  The DOTS agent sends
-   an Ping message and the peer DOTS agent will respond by sending an
-   single Pong message.
 
 
 
@@ -1793,6 +1793,11 @@ Reddy, et al.           Expires February 11, 2018              [Page 32]
 
 Internet-Draft             DOTS Signal Channel               August 2017
 
+
+   be exchanged between the DOTS agents using the Ping and Pong messages
+   (Section 4.4 in [I-D.ietf-core-coap-tcp-tls]).  The DOTS agent sends
+   an Ping message and the peer DOTS agent will respond by sending an
+   single Pong message.
 
 6.  Mapping parameters to CBOR
 
@@ -1833,6 +1838,18 @@ Internet-Draft             DOTS Signal Channel               August 2017
 
        Figure 21: CBOR mappings used in DOTS signal channel message
 
+
+
+
+
+
+
+
+Reddy, et al.           Expires February 11, 2018              [Page 33]
+
+Internet-Draft             DOTS Signal Channel               August 2017
+
+
 7.  (D)TLS Protocol Profile and Performance considerations
 
    This section defines the (D)TLS protocol profile of DOTS signal
@@ -1842,14 +1859,6 @@ Internet-Draft             DOTS Signal Channel               August 2017
    protocol downgrade.  These are general attacks on (D)TLS and not
    specific to DOTS over (D)TLS; please refer to the (D)TLS RFCs for
    discussion of these security issues.  DOTS agents MUST adhere to the
-
-
-
-Reddy, et al.           Expires February 11, 2018              [Page 33]
-
-Internet-Draft             DOTS Signal Channel               August 2017
-
-
    (D)TLS implementation recommendations and security considerations of
    [RFC7525] except with respect to (D)TLS version.  Since encryption of
    DOTS using (D)TLS is virtually a green-field deployment DOTS agents
@@ -1889,6 +1898,14 @@ Internet-Draft             DOTS Signal Channel               August 2017
    decreased probability of message delivery, DOTS agents MUST ensure
    that the DTLS record MUST fit within a single datagram.  If the Path
    MTU is not known to the DOTS server, an IP MTU of 1280 bytes SHOULD
+
+
+
+Reddy, et al.           Expires February 11, 2018              [Page 34]
+
+Internet-Draft             DOTS Signal Channel               August 2017
+
+
    be assumed.  The length of the URL MUST NOT exceed 256 bytes.  If UDP
    is used to convey the DOTS signal messages then the DOTS client must
    consider the amount of record expansion expected by the DTLS
@@ -1898,14 +1915,6 @@ Internet-Draft             DOTS Signal Channel               August 2017
    of the negotiated DTLS cipher suite + block padding (Section 4.1.1.1
    of [RFC6347]].  If the request size exceeds the Path MTU then the
    DOTS client MUST split the DOTS signal into separate messages, for
-
-
-
-Reddy, et al.           Expires February 11, 2018              [Page 34]
-
-Internet-Draft             DOTS Signal Channel               August 2017
-
-
    example the list of addresses in the 'target-ip' parameter could be
    split into multiple lists and each list conveyed in a new PUT
    request.
@@ -1945,15 +1954,6 @@ Internet-Draft             DOTS Signal Channel               August 2017
       client can resume the (D)TLS session in 0-RTT mode using PSK.  A
       simplified TLS 1.3 handshake with 0-RTT DOTS signal message
       exchange is shown in Figure 22.
-
-
-
-
-
-
-
-
-
 
 
 
