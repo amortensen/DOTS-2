@@ -672,8 +672,8 @@ module ietf-dots-signal-config {
               of ports (e.g., 1024-65535). This is an optional attribute.</t>
 
               <t hangText="target-protocol:">A list of protocols under attack.
-              Values are taken from the IANA protocol registry [<xref
-              target="proto_numbers"></xref>]. The value 0 has a special
+              Values are taken from the IANA protocol registry <xref
+              target="proto_numbers"></xref>. The value 0 has a special
               meaning for 'all protocols'. This is an optional attribute.</t>
 
               <t hangText="fqdn: ">A list of Fully Qualified Domain Names.
@@ -1112,9 +1112,9 @@ a1                                      # map(1)
           request, but DELETE request arrives at the DOTS server before the
           PUT request. To handle out-of-order delivery of requests, if an
           If-Match option is present in the PUT request and the mitigation-id
-          in the request matches any existing mitigation requests from the
-          DOTS client then the request is processed, and if no match is found
-          then the PUT request is silently ignored.</t>
+          in the request matches a mitigation request from the DOTS client
+          then the request is processed, and if no match is found then the PUT
+          request is silently ignored.</t>
 
           <figure anchor="Figure7" title="Efficacy Update">
             <artwork align="left"><![CDATA[   Header: PUT (Code=0.03)
@@ -1377,11 +1377,11 @@ a1                                      # map(1)
           <t>The DOTS server indicates the result of processing the PUT
           request using CoAP response codes. The CoAP response will include
           the CBOR body received in the request. If the DOTS server finds the
-          session parameter value conveyed in the PUT request in its
+          session-id parameter value conveyed in the PUT request in its
           configuration data and if the DOTS server has accepted the updated
           configuration parameters then the a 2.04 (Changed) response will be
           returned in the response. If the DOTS server does not find the
-          session-d parameter value conveyed in the PUT request in its
+          session-id parameter value conveyed in the PUT request in its
           configuration data and if the DOTS server has accepted the
           configuration parameters then a response code 2.01 (Created) will be
           returned in the response. If the request is missing one or more
