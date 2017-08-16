@@ -594,7 +594,7 @@ Internet-Draft             DOTS Signal Channel               August 2017
           leaf max-retransmit {
               type int16;
               description
-                  "Maximum retransmissions for the Confirmable message.";
+                  "Maximum retransmissions of a Confirmable message.";
           }
 
           leaf ack-timeout {
