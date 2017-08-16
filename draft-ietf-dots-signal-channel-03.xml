@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-dots-signal-channel-02"
+<rfc category="std" docName="draft-ietf-dots-signal-channel-03"
      ipr="trust200902">
   <front>
     <title abbrev="DOTS Signal Channel">Distributed Denial-of-Service Open
@@ -231,7 +231,7 @@
  +-----------+    +-------------+       /          \    +-------------+
  |           |____|             |_______|          |___ |             |
  |DOTS client|    |DOTS gateway |       | Internet |    | DOTS server |
- |           |    |          |  |       |          |    |             |
+ |           |    |             |       |          |    |             |
  +-----------+    +-------------+       \__________/    +-------------+
 ]]></artwork>
       </figure>
@@ -415,7 +415,7 @@ module ietf-dots-signal {
 
      description
        "This module contains YANG definition for DOTS
-       signal sent by the DOTS client to the DOTS server";
+       signal sent by the DOTS client to the DOTS server.";
 
      revision 2017-08-03 {
        reference 
@@ -423,60 +423,74 @@ module ietf-dots-signal {
      }
 
      container mitigation-scope {
-          description "top level container for mitigation request";
+          description 
+             "Top level container for a mitigation request.";
+
           list scope {
              key mitigation-id;
-             description "Identifier for the mitigation request";
+             description "Identifier for the mitigation request.";
              leaf mitigation-id {
                 type int32;
-                description "mitigation request identifier";
+                description "Mitigation request identifier.";
               }
               leaf-list target-ip {
                   type inet:ip-address;
-                  description "IP address";
+                  description 
+                     "IPv4 or IPv6 address identifyting the target.";
               }
+
               leaf-list target-prefix {
                   type inet:ip-prefix;
-                  description "prefix";
+                  description 
+                     "IPv4 or IPv6 prefix identifyting the target.";
               }
+
               list target-port-range {
                   key "lower-port upper-port";
                   description "Port range. When only lower-port is present, 
                                it represents a single port.";
+
                   leaf lower-port {
                      type inet:port-number;
                      mandatory true; 
-                     description "lower port";
+                     description "Lower port number.";
                   }
+
                   leaf upper-port {
                      type inet:port-number;
                          must ". >= ../lower-port" {
                            error-message
-                           "The upper-port must be greater than or 
-                            equal to lower-port";
+                           "The upper port number must be greater than or 
+                            equal to lower port number.";
                          }
-                         description "upper port";
+                         description "Upper port number.";
                   }
               }
+
               leaf-list target-protocol {
                   type uint8;
-                  description "Internet Protocol number";
+                  description "Identifies the target protocol number.";
               }
+
               leaf-list fqdn {
                    type inet:domain-name;
                    description "FQDN";
               }
+
               leaf-list uri {
                   type inet:uri;
                   description "URI";
               }
+
               leaf-list alias {
                   type string;
                   description "alias name";
               }
+
               leaf lifetime {
                   type int32;
-                  description "lifetime";
+                  description 
+                    "Indicates the lifetime of the mitigation request.";
               }
           } 
      }
@@ -513,7 +527,7 @@ module ietf-dots-signal-config {
 
      description
        "This module contains YANG definition for DOTS
-       signal channel session configuration";
+       signal channel session configuration.";
 
      revision 2016-11-28 {
        reference 
@@ -521,37 +535,50 @@ module ietf-dots-signal-config {
      }
 
      container signal-config {
-          description "top level container for DOTS signal channel session 
-                       configuration";
+          description "Top level container for DOTS signal channel session 
+                       configuration.";
+
           leaf session-id {
               type int32;
-              description "Identifier for the DOTS signal channel 
-                           session configuration data";
+              description "An identifier for the DOTS signal channel 
+                           session configuration data.";
           }
+
           leaf heartbeat-timeout {
               type int16;
-              description "heartbeat timeout";
+              description 
+                 "DOTS agents regularly send heartbeats (Ping/
+                  Pong) to each other after mutual authentication in order to keep
+                  the DOTS signal channel open, heartbeat timeout is the time to
+                   wait for a Pong in milliseconds.";
           }
+
           leaf max-retransmit {
               type int16;
-              description "Maximum number of retransmissions";
+              description 
+                  "Maximum retransmissions for the DOTS signal channel.";
           }
+
           leaf ack-timeout {
               type int16;
-              description "Initial retransmission timeout value";
+              description 
+                 "Initial retransmission timeout value.";
           }
+
           leaf ack-random-factor {
               type decimal64 {
               fraction-digits 2;
               }
-              description "Random factor used to influence the timing of
-                           retransmissions";
+              description 
+                   "Random factor used to influence the timing of
+                    retransmissions";
          }
          leaf trigger-mitigation {
              type boolean;
              default true;
-             description "If false then mitigation is triggered 
-             only when the DOTS server channel session is lost";
+             description 
+                 "If false, then mitigation is triggered 
+                  only when the DOTS server channel session is lost";
          }
       }
 }
@@ -1096,7 +1123,7 @@ a1                                      # map(1)
           </section>
         </section>
 
-        <section anchor="put" title="Efficacy Update from DOTS Client">
+        <section anchor="put" title="Efficacy Update from DOTS Clients">
           <t>While DDoS mitigation is active, a DOTS client MAY frequently
           transmit DOTS mitigation efficacy updates to the relevant DOTS
           server. An PUT request (<xref target="Figure7"></xref>) is used to
@@ -1271,7 +1298,7 @@ a1                                      # map(1)
           the signaling channel (e.g., heartbeat timeout, maximum
           retransmissions etc). Message transmission parameters for CoAP are
           defined in Section 4.8 of <xref target="RFC7252"></xref>. The
-          recommended values of transmission parameter values are ack_timeout
+          RECOMMENDED values of transmission parameter values are ack_timeout
           (2 seconds), max-retransmit (7), ack-random-factor (1.5) and
           heartbeat-timeout (371 seconds). The heartbeat-timeout value is
           equal to the MAX_TRANSMIT_WAIT counter (Section 4.8.2 in <xref
@@ -1334,21 +1361,21 @@ a1                                      # map(1)
               attribute.</t>
 
               <t hangText="trigger-mitigation: ">If the parameter value is set
-              to false then DDoS mitigation is triggered only when the DOTS
+              to 'false', then a DDoS mitigation is triggered only when the DOTS
               signal channel session is lost. Automated mtigation on loss of
               signal is discussed in Section 3.3.3 of <xref
               target="I-D.ietf-dots-architecture"></xref>. If the DOTS client
-              ceases to respond to heartbeat messages then the DOTS server can
+              ceases to respond to heartbeat messages, then the DOTS server can
               detect that the DOTS session is lost. The default value of the
-              parameter is true. This is an optional attribute.</t>
+              parameter is 'true'. This is an optional attribute.</t>
             </list></t>
 
           <t>In the PUT request at least one of the attributes
-          heartbeat-timeout or max-retransmit or ack-timeout or
-          ack-random-factor or trigger-mitigation MUST be present. The PUT
-          request with higher numeric session-id value over-rides the DOTS
+          heartbeat-timeout, max-retransmit, ack-timeout, 
+          ack-random-factor, and trigger-mitigation MUST be present. The PUT
+          request with higher numeric 'session-id' value over-rides the DOTS
           signal channel session configuration data installed by a PUT request
-          with a lower numeric session-id value.</t>
+          with a lower numeric 'session-id' value.</t>
 
           <t><xref target="Figure14"></xref> shows a PUT request example to
           convey the configuration parameters for the DOTS signal channel.</t>
@@ -1428,7 +1455,7 @@ a1                                      # map(1)
 ]]></artwork>
           </figure>
 
-          <t>If the DOTS server does not find the session-id parameter value
+          <t>If the DOTS server does not find the 'session-id' parameter value
           conveyed in the DELETE request in its configuration data, then it
           responds with a 4.04 (Not Found) error response code. The DOTS
           server successfully acknowledges a DOTS client's request to remove
@@ -1488,9 +1515,9 @@ a1                                      # map(1)
         <t>The parameters are described below:</t>
 
         <t><list style="hanging">
-            <t hangText="alt-server:">FQDN of alternate DOTS server.</t>
+            <t hangText="alt-server:">FQDN of an alternate DOTS server.</t>
 
-            <t hangText="addr:">IP address of alternate DOTS server.</t>
+            <t hangText="addr:">IP address of an alternate DOTS server.</t>
 
             <t hangText="ttl:">Time to live (TTL) represented as an integer
             number of seconds.</t>
@@ -1528,16 +1555,16 @@ a1                                      # map(1)
       </section>
 
       <section title="Heartbeat Mechanism">
-        <t>To provide a metric of signal health and distinguish an idle signal
-        channel from a disconnected or defunct session, the DOTS agent sends a
+        <t>To provide a metric of signal health and distinguish an 'idle' signal
+        channel from a 'disconnected' or 'defunct' session, the DOTS agent sends a
         heartbeat over the signal channel to maintain its half of the channel.
         The DOTS agent similarly expects a heartbeat from its peer agent, and
         may consider a session terminated in the extended absence of a peer
         agent heartbeat. While the communication between the DOTS agents is
         quiescent, the DOTS client will probe the DOTS server to ensure it has
         maintained cryptographic state and vice versa. Such probes can also
-        keep alive firewall or NAT bindings. This probing reduces the
-        frequency of needing a new handshake when a DOTS signal needs to be
+        keep alive firewall and/or NAT bindings. This probing reduces the
+        frequency of establishing a new handshake when a DOTS signal needs to be
         conveyed to the DOTS server. In DOTS over UDP, heartbeat messages can
         be exchanged between the DOTS agents using the &ldquo;COAP ping&rdquo;
         mechanism (Section 4.2 in <xref target="RFC7252"></xref>). The DOTS
@@ -1545,8 +1572,8 @@ a1                                      # map(1)
         respond by sending an Reset message. In DOTS over TCP, heartbeat
         messages can be exchanged between the DOTS agents using the Ping and
         Pong messages (Section 4.4 in <xref
-        target="I-D.ietf-core-coap-tcp-tls"></xref>). The DOTS agent sends an
-        Ping message and the peer DOTS agent will respond by sending an single
+        target="I-D.ietf-core-coap-tcp-tls"></xref>). The DOTS agent sends a
+        Ping message and the peer DOTS agent would respond by sending a single
         Pong message.</t>
       </section>
     </section>
