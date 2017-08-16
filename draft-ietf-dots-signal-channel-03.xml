@@ -1360,9 +1360,9 @@ a1                                      # map(1)
               attribute.</t>
 
               <t hangText="trigger-mitigation: ">If the parameter value is set
-              to 'false', then a DDoS mitigation is triggered only when the
-              DOTS signal channel session is lost. Automated mtigation on loss
-              of signal is discussed in Section 3.3.3 of <xref
+              to 'false', then DDoS mitigation is triggered only when the DOTS
+              signal channel session is lost. Automated mtigation on loss of
+              signal is discussed in Section 3.3.3 of <xref
               target="I-D.ietf-dots-architecture"></xref>. If the DOTS client
               ceases to respond to heartbeat messages, then the DOTS server
               can detect that the DOTS session is lost. The default value of

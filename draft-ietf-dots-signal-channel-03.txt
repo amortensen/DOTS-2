@@ -1531,7 +1531,7 @@ Internet-Draft             DOTS Signal Channel               August 2017
       CoAP).  This is an optional attribute.
 
    trigger-mitigation:   If the parameter value is set to 'false', then
-      a DDoS mitigation is triggered only when the DOTS signal channel
+      DDoS mitigation is triggered only when the DOTS signal channel
       session is lost.  Automated mtigation on loss of signal is
       discussed in Section 3.3.3 of [I-D.ietf-dots-architecture].  If
       the DOTS client ceases to respond to heartbeat messages, then the
