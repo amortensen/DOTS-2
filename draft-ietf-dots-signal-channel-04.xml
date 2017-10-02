@@ -795,7 +795,7 @@ module ietf-dots-signal-config {
           alias-name with the corresponding parameter values in target-ip,
           target-prefix, target-port-range, fqdn, or uri.</t>
 
-          <t><xref target="Figure2"></xref> shows a PUT request example to
+          <t><xref target="Figure2"></xref> shows an PUT request example to
           signal that ports 80, 8080, and 443 on the servers 2001:db8:6401::1
           and 2001:db8:6401::2 are being attacked (illustrated in JSON
           diagnostic notation).</t>
@@ -871,7 +871,7 @@ a1                                      # map(1)
             </figure>The DOTS server indicates the result of processing the
           PUT request using CoAP response codes. CoAP 2.xx codes are success.
           CoAP 4.xx codes are some sort of invalid requests. <xref
-          target="put_response"></xref> shows a PUT response for CoAP 2.xx
+          target="put_response"></xref> shows an PUT response for CoAP 2.xx
           response codes.</t>
 
           <t><figure anchor="put_response" title="2.xx response body">
@@ -1514,7 +1514,7 @@ a1                                      # map(1)
           signal channel session configuration data installed by a PUT request
           with a lower numeric session-id value.</t>
 
-          <t><xref target="Figure14"></xref> shows a PUT request example to
+          <t><xref target="Figure14"></xref> shows an PUT request example to
           convey the configuration parameters for the DOTS signal channel.</t>
 
           <t><figure anchor="Figure14"

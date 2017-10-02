@@ -886,7 +886,7 @@ Internet-Draft             DOTS Signal Channel              October 2017
    alias-name with the corresponding parameter values in target-ip,
    target-prefix, target-port-range, fqdn, or uri.
 
-   Figure 6 shows a PUT request example to signal that ports 80, 8080,
+   Figure 6 shows an PUT request example to signal that ports 80, 8080,
    and 443 on the servers 2001:db8:6401::1 and 2001:db8:6401::2 are
    being attacked (illustrated in JSON diagnostic notation).
 
@@ -977,7 +977,7 @@ Internet-Draft             DOTS Signal Channel              October 2017
 
    The DOTS server indicates the result of processing the PUT request
    using CoAP response codes.  CoAP 2.xx codes are success.  CoAP 4.xx
-   codes are some sort of invalid requests.  Figure 7 shows a PUT
+   codes are some sort of invalid requests.  Figure 7 shows an PUT
    response for CoAP 2.xx response codes.
 
    {
@@ -1765,7 +1765,7 @@ Internet-Draft             DOTS Signal Channel              October 2017
    configuration data installed by a PUT request with a lower numeric
    session-id value.
 
-   Figure 17 shows a PUT request example to convey the configuration
+   Figure 17 shows an PUT request example to convey the configuration
    parameters for the DOTS signal channel.
 
 
