@@ -79,7 +79,7 @@ Table of Contents
    2.  Notational Conventions and Terminology  . . . . . . . . . . .   4
    3.  DOTS Data Channel . . . . . . . . . . . . . . . . . . . . . .   4
      3.1.  DOTS Data Channel YANG Model  . . . . . . . . . . . . . .   6
-       3.1.1.  Identifier Model structure  . . . . . . . . . . . . .   6
+       3.1.1.  Identifier Model Tree Structure . . . . . . . . . . .   6
        3.1.2.  Identifier Model YANG Module  . . . . . . . . . . . .   6
        3.1.3.  Filter Model YANG Module Tree Structure . . . . . . .   8
        3.1.4.  Filter Model YANG Module  . . . . . . . . . . . . . .   9
@@ -296,7 +296,7 @@ Internet-Draft              DOTS Data Channel               October 2017
 
 3.1.  DOTS Data Channel YANG Model
 
-3.1.1.  Identifier Model structure
+3.1.1.  Identifier Model Tree Structure
 
    This document defines a YANG [RFC6020] module for creating
    identifiers, such as names or aliases, for resources for which
@@ -415,7 +415,7 @@ Internet-Draft              DOTS Data Channel               October 2017
 3.1.3.  Filter Model YANG Module Tree Structure
 
    This document extends the "ietf-access-control-list" Access Control
-   List (ACL) YANG data model [I-D.ietf-netmod-acl-model] for the
+   List (ACL) YANG module [I-D.ietf-netmod-acl-model] for the
    configuration of filtering rules.  ACL is explained in Section 1 of
    [I-D.ietf-netmod-acl-model].
 
