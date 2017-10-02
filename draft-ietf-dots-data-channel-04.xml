@@ -333,7 +333,7 @@
       returning a TLS message.</t>
 
       <section anchor="YANG" title="DOTS Data Channel YANG Model">
-        <section title="Identifier Model structure">
+        <section title="Identifier Model Tree Structure">
           <t>This document defines a YANG <xref target="RFC6020"></xref>
           module for creating identifiers, such as names or aliases, for
           resources for which mitigation may be requested. Such identifiers
@@ -441,7 +441,7 @@ module ietf-dots-data-channel-identifier {
 
         <section title="Filter Model YANG Module Tree Structure">
           <t>This document extends the "ietf-access-control-list" Access
-          Control List (ACL) YANG data model <xref
+          Control List (ACL) YANG module <xref
           target="I-D.ietf-netmod-acl-model"></xref> for the configuration of
           filtering rules. ACL is explained in Section 1 of <xref
           target="I-D.ietf-netmod-acl-model"></xref>.</t>
