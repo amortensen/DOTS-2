@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-dots-data-channel-04"
+<rfc category="std" docName="draft-ietf-dots-data-channel-05"
      ipr="trust200902">
   <front>
     <title abbrev="DOTS Data Channel">Distributed Denial-of-Service Open
@@ -176,12 +176,12 @@
       attack. The victim in this attack can be an application server, a
       client, a router, a firewall, or an entire network.</t>
 
-      <t>DDoS Open Threat Signaling (DOTS) defines two channels: signal and
-      data channels <xref target="I-D.ietf-dots-architecture"></xref> (<xref
-      target="channels"></xref>). The DOTS signal channel used to convey that
-      a network is under a DDOS attack to an upstream DOTS server so that
-      appropriate mitigation actions are undertaken on the suspect traffic is
-      further elaborated in <xref
+      <t>DDoS Open Threat Signaling (DOTS) <xref
+      target="I-D.ietf-dots-architecture"></xref> defines two channels: signal
+      and data channels (<xref target="channels"></xref>). The DOTS signal
+      channel used to convey that a network is under a DDOS attack to an
+      upstream DOTS server so that appropriate mitigation actions are
+      undertaken on the suspect traffic is further elaborated in <xref
       target="I-D.ietf-dots-signal-channel"></xref>. The DOTS data channel is
       used for infrequent bulk data exchange between DOTS agents in the aim to
       significantly augment attack response coordination.<figure
@@ -245,6 +245,11 @@
       <t>The reader should be familiar with the terms defined in <xref
       target="I-D.ietf-dots-architecture"></xref>.</t>
 
+      <t>The terminology for describing YANG data modules is defined in <xref
+      target="RFC7950"></xref>. The meaning of the symbols in tree diagrams is
+      defined in <xref
+      target="I-D.ietf-netmod-yang-tree-diagrams"></xref>.</t>
+
       <t>For simplicity, all of the examples in this document use "/restconf"
       as the discovered RESTCONF API root path. Many protocol header lines and
       message-body text within examples throughout the document are split into
@@ -257,8 +262,9 @@
 
     <section title="DOTS Data Channel">
       <t>The DOTS data channel is intended to be used for bulk data exchanges
-      between DOTS agents. Unlike the signal channel, which must operate
-      nominally even when confronted with signal degradation due to packet
+      between DOTS agents. Unlike the signal channel <xref
+      target="I-D.ietf-dots-signal-channel"></xref>, which must operate
+      nominally even when confronted with signal degradation due to packets
       loss, the data channel is not expected to be constructed to deal with
       DDoS attack conditions.</t>
 
@@ -267,36 +273,42 @@
       delivery success or failure. RESTCONF <xref target="RFC8040"></xref>
       over TLS <xref target="RFC5246"></xref> over TCP is used for DOTS data
       channel (<xref target="fig_dots2"></xref>). RESTCONF uses HTTP methods
-      to provide CRUD operations on a conceptual datastore containing
-      YANG-defined data, which is compatible with a server which implements
-      NETCONF datastores. The HTTP POST, PUT, PATCH, and DELETE methods are
-      used to edit data resources represented by DOTS data channel YANG data
-      models. These basic edit operations allow the DOTS data channel running
-      configuration to be altered by a DOTS client. DOTS data channel
-      configuration data and state data can be retrieved with the GET method.
-      HTTP status codes are used to report success or failure for RESTCONF
-      operations. The DOTS client will perform the root resource discovery
-      procedure discussed in Section 3.1 of <xref target="RFC8040"></xref> to
-      determine the root of the RESTCONF API. After discovering the RESTCONF
-      API root, the DOTS client MUST use this value as the initial part of the
-      path in the request URI, in any subsequent request to the DOTS server.
-      The DOTS server can optionally support retrieval of the YANG modules it
-      supports (Section 3.7 in <xref target="RFC8040"></xref>), for example,
-      DOTS client can use RESTCONF to retrieve the company proprietary YANG
-      model supported by the DOTS server.</t>
+      to provide CRUD (create, read, update, delete) operations on a
+      conceptual datastore containing YANG data, which is compatible with a
+      server implementing NETCONF datastores.</t>
 
-      <t>Note: This document uses RESTCONF, a protocol based on HTTP <xref
-      target="RFC7230"></xref>, for configuring data defined in YANG version 1
-      <xref target="RFC6020"></xref> or YANG version 1.1 <xref
-      target="RFC7950"></xref>, using the datastore concepts defined in the
-      Network Configuration Protocol (NETCONF) <xref target="RFC6241"></xref>.
-      RESTCONF combines the simplicity of the HTTP protocol with the
-      predictability and automation potential of a schema-driven API. RESTCONF
-      offers a simple subset of NETCONF functionality and provides a
-      simplified interface using REST-like API which addresses the needs of
-      the DOTS data channel and hence an optimal choice.</t>
+      <t>The HTTP POST, PUT, PATCH, and DELETE methods are used to edit data
+      resources represented by DOTS data channel YANG data models. These basic
+      edit operations allow the DOTS data channel running configuration to be
+      altered by a DOTS client.</t>
 
-      <t><figure anchor="fig_dots2"
+      <t>DOTS data channel configuration data and state data can be retrieved
+      with the GET method. HTTP status codes are used to report success or
+      failure for RESTCONF operations.</t>
+
+      <t>The DOTS client will perform the root resource discovery procedure
+      discussed in Section 3.1 of <xref target="RFC8040"></xref> to determine
+      the root of the RESTCONF API. After discovering the RESTCONF API root,
+      the DOTS client uses this value as the initial part of the path in the
+      request URI, in any subsequent request to the DOTS server. The DOTS
+      server may support retrieval of the YANG modules it supports (Section
+      3.7 in <xref target="RFC8040"></xref>), for example, a DOTS client may
+      use RESTCONF to retrieve the company proprietary YANG modules supported
+      by the DOTS server.</t>
+
+      <t><list style="empty">
+          <t>Note: This document uses RESTCONF, a protocol based on HTTP <xref
+          target="RFC7230"></xref>, for configuring data defined in YANG
+          version 1 <xref target="RFC6020"></xref> or YANG version 1.1 <xref
+          target="RFC7950"></xref>, using the datastore concepts defined in
+          the Network Configuration Protocol (NETCONF) <xref
+          target="RFC6241"></xref>. RESTCONF combines the simplicity of the
+          HTTP protocol with the predictability and automation potential of a
+          schema-driven API. RESTCONF offers a simple subset of NETCONF
+          functionality and provides a simplified interface using REST-like
+          API which addresses the needs of the DOTS data channel and hence an
+          optimal choice.</t>
+        </list><figure anchor="fig_dots2"
           title="Abstract Layering of DOTS data channel over RESTCONF over TLS">
           <artwork align="center"><![CDATA[          +--------------+
           |     DOTS     |
@@ -321,24 +333,25 @@
       JSON text.</t>
 
       <t>A DOTS client registers itself to its DOTS server(s) in order to set
-      up DOTS data channel related configuration data on the DOTS server and
-      receive state data (i.e., non-configuration data) from the DOTS server.
-      A single DOTS data channel between DOTS agents can be used to exchange
-      multiple requests and multiple responses. To reduce DOTS client and DOTS
-      server workload, DOTS client SHOULD re-use the TLS session. While the
-      communication to the DOTS server is quiescent, the DOTS client MAY probe
-      the server to ensure it has maintained cryptographic state. Such probes
-      can also keep alive firewall or NAT bindings. A TLS heartbeat <xref
-      target="RFC6520"></xref> verifies the DOTS server still has TLS state by
-      returning a TLS message.</t>
+      up DOTS data channel related configuration data and receive state data
+      (i.e., non-configuration data) from the DOTS server(s).</t>
 
-      <section anchor="YANG" title="DOTS Data Channel YANG Model">
-        <section title="Identifier Model Tree Structure">
-          <t>This document defines a YANG <xref target="RFC6020"></xref>
-          module for creating identifiers, such as names or aliases, for
-          resources for which mitigation may be requested. Such identifiers
-          may then be used in subsequent DOTS signal channel exchanges to
-          refer more efficiently to the resources under attack.</t>
+      <t>A single DOTS data channel between DOTS agents can be used to
+      exchange multiple requests and multiple responses. To reduce DOTS client
+      and DOTS server workload, DOTS client SHOULD re-use the same TLS
+      session. While the communication to the DOTS server is quiescent, the
+      DOTS client MAY probe the server to ensure it has maintained
+      cryptographic state. Such probes can also keep alive firewall and/or NAT
+      bindings. A TLS heartbeat <xref target="RFC6520"></xref> verifies the
+      DOTS server still has TLS state by returning a TLS message.</t>
+
+      <section anchor="YANG" title="DOTS Data Channel YANG Module">
+        <section title="Identifier Module Tree Structure">
+          <t>This document defines a YANG module for creating identifiers,
+          such as names or aliases, for resources for which mitigation may be
+          requested. Such identifiers may be used in subsequent DOTS signal
+          channel exchanges to refer more efficiently to the resources under
+          attack.</t>
 
           <t>This document defines the YANG module
           "ietf-dots-data-channel-identifier", which has the following tree
@@ -358,25 +371,58 @@
           +--rw target-protocol*     uint8
           +--rw fqdn*                inet:domain-name
           +--rw uri*                 inet:uri]]></artwork>
-            </figure></t>
+            </figure>This structure is aligned with Section 5.2.1 of <xref
+          target="I-D.ietf-dots-signal-channel"></xref>.</t>
         </section>
 
         <section title="Identifier Model YANG Module">
           <t><figure>
-              <artwork><![CDATA[<CODE BEGINS> file "ietf-dots-data-channel-identifier@2017-08-03.yang"
+              <artwork><![CDATA[<CODE BEGINS> file "ietf-dots-data-channel-identifier@2017-10-12.yang"
 
 module ietf-dots-data-channel-identifier {
+      yang-version 1.1;
       namespace "urn:ietf:params:xml:ns:yang:ietf-dots-data-channel-identifier";
+
       prefix "alias";
+
       import ietf-inet-types {
           prefix "inet";
       }
-     organization "McAfee, Inc.";
-     contact "Konda, Tirumaleswar Reddy <TirumaleswarReddy_Konda@McAfee.com>";
+
+    organization "IETF DOTS Working Group";
+
+    contact
+      "Konda, Tirumaleswar Reddy <TirumaleswarReddy_Konda@McAfee.com>
+       Mohamed Boucadair <mohamed.boucadair@orange.com>
+       Kaname Nishizuka <kaname@nttv6.jp>
+       Liang Xia <frank.xialiang@huawei.com>
+       Prashanth Patil <praspati@cisco.com>
+       Andrew Mortensen <amortensen@arbor.net>
+       Nik Teague <nteague@verisign.com>";
 
      description
-       "This module contains YANG definition for
-        configuring identifiers for resources using DOTS data channel";
+       "This module contains YANG definition for configuring
+        identifiers for resources using DOTS data channel.
+
+        Copyright (c) 2017 IETF Trust and the persons identified as
+        authors of the code.  All rights reserved.
+
+        Redistribution and use in source and binary forms, with or
+        without modification, is permitted pursuant to, and subject
+        to the license terms contained in, the Simplified BSD License
+        set forth in Section 4.c of the IETF Trust's Legal Provisions
+        Relating to IETF Documents
+        (http://trustee.ietf.org/license-info).
+
+        This version of this YANG module is part of RFC XXXX; see
+        the RFC itself for full legal notices.";
+
+     revision 2017-10-12 {
+       description "Fix nits and align the module with the signal
+                    channel.";
+       reference 
+       "-05";
+     }
 
      revision 2017-08-03 {
        reference 
@@ -384,28 +430,36 @@ module ietf-dots-data-channel-identifier {
      }
 
      container identifier {
-          description "top level container for identifiers";
+          description "Top level container for identifiers";
 
               leaf-list client-identifier {
                  type binary; 
                  description  "A client identifier conveyed by a DOTS gateway
                                to a remote DOTS server.";
+                 
+                 reference
+                    "I-D.itef-dots-signal-channel"; 
               }
+
               list alias {
                    key alias-name;
-                   description "list of identifiers"; 
+                   description "List of identifiers"; 
+
                    leaf alias-name {
                       type string;
                       description "alias name";
                    }
+
                    leaf-list target-ip {
                       type inet:ip-address;
-                      description "IPv4 or IPv6 address identifyting the target.";
+                      description "IPv4 or IPv6 address identifying the target.";
                    }
+
                    leaf-list target-prefix {
                       type inet:ip-prefix;
-                      description "IPv4 or IPv6 prefix identifyting the target.";
+                      description "IPv4 or IPv6 prefix identifying the target.";
                    }
+
                    list target-port-range {
                       key "lower-port upper-port";
                       description 
@@ -426,19 +480,26 @@ module ietf-dots-data-channel-identifier {
                          description "Upper port number.";
                       }
                    }
+
                    leaf-list target-protocol {
                       type uint8;
                       description "Identifies the target protocol number.";
+                     
+                      reference
+                       "https://www.iana.org/assignments/protocol-numbers/
+                        protocol-numbers.xhtml";
                    }
+
                    leaf-list fqdn {
                      type inet:domain-name;
                      description "FQDN";
                    }
+
                    leaf-list uri {
                      type inet:uri;
                      description "URI";
                    }
-              }
+          }
      }
   }
  <CODE ENDS>
@@ -447,13 +508,13 @@ module ietf-dots-data-channel-identifier {
         </section>
 
         <section title="Filter Model YANG Module Tree Structure">
-          <t>This document extends the "ietf-access-control-list" Access
+          <t>This document augments the "ietf-access-control-list" Access
           Control List (ACL) YANG module <xref
-          target="I-D.ietf-netmod-acl-model"></xref> for the configuration of
-          filtering rules. ACL is explained in Section 1 of <xref
+          target="I-D.ietf-netmod-acl-model"></xref> for managing filtering
+          rules. ACL is explained in Section 1 of <xref
           target="I-D.ietf-netmod-acl-model"></xref>.</t>
 
-          <t>Examples of such configuration include:</t>
+          <t>Examples of ACL management include, but not limited to,:</t>
 
           <t><list style="symbols">
               <t>Black-list management, which enables a DOTS client to inform
@@ -471,25 +532,27 @@ module ietf-dots-data-channel-identifier {
             </list></t>
 
           <t>This document defines the YANG module
-          "ietf-dots-access-control-list" to extend the
-          "ietf-access-control-list" module to handle fragmented packets and
-          to support rate-limit action. Filtering fragments adds an additional
-          layer of protection against a denial-of-service (DoS) attack that
-          uses only noninitial fragments. When there is only Layer 3
-          information in the ACL entry and the fragments keyword is present,
-          for noninitial fragments matching the ACL entry, the deny or permit
-          action associated with the ACL entry will be enforced and for
-          initial or non-fragment matching the ACL entry, the the next ACL
-          entry will be processed. When there is both Layer 3 and Layer 4
-          information in the ACL entry and the fragments keyword is present,
-          the ACL action is conservative for both permit and deny actions. The
-          actions are conservative to not accidentally deny a fragmented
-          portion of a flow because the fragments do not contain sufficient
-          information to match all of the filter attributes. In the deny
-          action case, instead of denying a non-initial fragment, the next ACL
-          entry is processed. In the permit case, it is assumed that the Layer
-          4 information in the non-initial fragment, if available, matches the
-          Layer 4 information in the ACL entry.</t>
+          "ietf-dots-access-control-list" to augment the
+          "ietf-access-control-list" module to support filters based on the
+          client identifier (client-identifier), to support rate-limit action
+          (rate-limit), and to handle fragmented packets (fragments).</t>
+
+          <t>Filtering fragments adds an additional layer of protection
+          against a DoS attack that uses only noninitial fragments. When there
+          is only Layer 3 information in the ACL entry and the fragments
+          keyword is present, for noninitial fragments matching the ACL entry,
+          the deny or permit action associated with the ACL entry will be
+          enforced and for initial or non-fragment matching the ACL entry, the
+          next ACL entry will be processed. When there is both Layer 3 and
+          Layer 4 information in the ACL entry and the fragments keyword is
+          present, the ACL action is conservative for both permit and deny
+          actions. The actions are conservative to not accidentally deny a
+          fragmented portion of a flow because the fragments do not contain
+          sufficient information to match all of the filter attributes. In the
+          deny action case, instead of denying a non-initial fragment, the
+          next ACL entry is processed. In the permit case, it is assumed that
+          the Layer 4 information in the non-initial fragment, if available,
+          matches the Layer 4 information in the ACL entry.</t>
 
           <t>The "ietf-dots-access-control-list" module has the following
           structure:</t>
@@ -507,25 +570,53 @@ module ietf-dots-data-channel-identifier {
         </section>
 
         <section title="Filter Model YANG Module">
-          <t>This YANG module augments the "ietf-access-control-list" YANG
-          module defined in <xref
-          target="I-D.ietf-netmod-acl-model"></xref>.</t>
-
           <t><figure>
-              <artwork><![CDATA[<CODE BEGINS> file "ietf-dots-access-control-list@2017-06-12.yang"
+              <artwork><![CDATA[<CODE BEGINS> file "ietf-dots-access-control-list@2017-10-12.yang"
 
 module ietf-dots-access-control-list {
+      yang-version 1.1;
+
       namespace "urn:ietf:params:xml:ns:yang:ietf-dots-access-control-list";
       prefix "dots-acl";
+
       import ietf-access-control-list {
        prefix "ietf-acl";
       }
-      organization "McAfee, Inc.";
-      contact "Konda, Tirumaleswar Reddy <TirumaleswarReddy_Konda@McAfee.com>";
 
-      description
-       "This module contains YANG definition for
-        configuring filtering rules using DOTS data channel";
+    organization "IETF DOTS Working Group";
+
+    contact
+      "Konda, Tirumaleswar Reddy <TirumaleswarReddy_Konda@McAfee.com>
+       Mohamed Boucadair <mohamed.boucadair@orange.com>
+       Kaname Nishizuka <kaname@nttv6.jp>
+       Liang Xia <frank.xialiang@huawei.com>
+       Prashanth Patil <praspati@cisco.com>
+       Andrew Mortensen <amortensen@arbor.net>
+       Nik Teague <nteague@verisign.com>";
+
+     description
+       "This module contains YANG definition for configuring
+        filtering rules using DOTS data channel.
+
+        Copyright (c) 2017 IETF Trust and the persons identified as
+        authors of the code.  All rights reserved.
+
+        Redistribution and use in source and binary forms, with or
+        without modification, is permitted pursuant to, and subject
+        to the license terms contained in, the Simplified BSD License
+        set forth in Section 4.c of the IETF Trust's Legal Provisions
+        Relating to IETF Documents
+        (http://trustee.ietf.org/license-info).
+
+        This version of this YANG module is part of RFC XXXX; see
+        the RFC itself for full legal notices.";
+
+     revision 2017-10-12 {
+       description "Fix nits and align the module with the signal
+                    channel.";
+       reference 
+       "-05";
+     }
 
       revision 2017-06-12 {
        reference 
@@ -534,17 +625,17 @@ module ietf-dots-access-control-list {
 
     augment "/ietf-acl:access-lists" {
 
-      description "client-identifir parameter";
+      description "client-identifier parameter.";
 
       leaf-list client-identifier {
           type binary; 
           description  "A client identifier conveyed by a DOTS gateway
                         to a remote DOTS server.";
        }
-
     }
     
-    augment "/ietf-acl:access-lists/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace/ietf-acl:actions/ietf-acl:packet-handling" {
+    augment "/ietf-acl:access-lists/ietf-acl:acl/ietf-acl:aces/"
+             + "ietf-acl:ace/ietf-acl:actions/ietf-acl:packet-handling" {
 
       description "rate-limit action";
 
@@ -560,11 +651,11 @@ module ietf-dots-access-control-list {
 
     augment "/ietf-acl:access-lists/ietf-acl:acl/ietf-acl:aces/ietf-acl:ace" {
 
-      description "handle non-intial and initial fragments";
+      description "Handle non-initial and initial fragments.";
 
       leaf fragments {
           type empty;
-          description "handle fragments.";
+          description "Handle fragments.";
       }
     }
 }
@@ -588,7 +679,7 @@ module ietf-dots-access-control-list {
  Content-Format: "application/yang.api+json"
  {
   "ietf-dots-data-channel-identifier:identifier": {
-    "client-identifer": "string", 
+    "client-identifier": "string", 
     "alias": [
       {
         "alias-name": "string",
@@ -624,10 +715,11 @@ module ietf-dots-access-control-list {
           <t>The header parameters are described below:</t>
 
           <t><list style="hanging">
-              <t hangText="client-identifer:"> This attribute has the same
+              <t hangText="client-identifer:">This attribute has the same
               meaning, syntax and processing rules as the 'client-identifier'
               attribute defined in <xref
-              target="I-D.ietf-dots-signal-channel"></xref>. </t>
+              target="I-D.ietf-dots-signal-channel"></xref>. This is an
+              optional attribute.</t>
 
               <t hangText="alias-name:">Name of the alias. This is a mandatory
               attribute.</t>
@@ -657,9 +749,9 @@ module ietf-dots-access-control-list {
               an optional attribute.</t>
             </list></t>
 
-          <t>In the POST request at least one of the attributes ip or prefix
-          or fqdn or uri MUST be present. DOTS agents can safely ignore
-          Vendor-Specific parameters they don't understand.</t>
+          <t>In the POST request at least one of the attributes 'target-ip' or
+          'target-prefix' or 'fqdn' or 'uri' MUST be present. DOTS agents can
+          safely ignore Vendor-Specific parameters they don't understand.</t>
 
           <t><xref target="Figure2"></xref> shows a POST request to create
           alias called "https1" for HTTP(S) servers with IP addresses
@@ -724,7 +816,7 @@ Content-Format: "application/yang.api+json"
 
           <t>In RESTCONF, URI-encoded path expressions are used. A RESTCONF
           data resource identifier is encoded from left to right, starting
-          with the top-level data node, according to the "api-path" rule
+          with the top-level data node, according to the 'api-path' rule
           defined in Section 3.5.3.1 of <xref target="RFC8040"></xref>. The
           data node in the above path expression is a YANG list node and MUST
           be encoded according to the rules defined in Section 3.5.1 of <xref
@@ -805,17 +897,18 @@ Content-Format: "application/yang.api+json"
 
       <section title="Filtering Rules">
         <t>The DOTS server either receives the filtering rules directly from
-        the DOTS client or via the DOTS gateway. If the DOTS client signals
-        the filtering rules via the DOTS gateway then the DOTS gateway
-        validates if the DOTS client is authorized to signal the filtering
-        rules and if the client is authorized propagates the rules to the DOTS
-        server. Likewise, the DOTS server validates if the DOTS gateway is
-        authorized to signal the filtering rules. To create or purge filters,
-        the DOTS client sends HTTP requests to the DOTS gateway. The DOTS
-        gateway validates the rules in the requests and proxies the requests
-        containing the filtering rules to a DOTS server. When the DOTS gateway
-        receives the associated HTTP response from the DOTS server, it
-        propagates the response back to the DOTS client.</t>
+        the DOTS client or via a DOTS gateway.</t>
+
+        <t>If the DOTS client signals the filtering rules via a DOTS gateway,
+        then the DOTS gateway validates if the DOTS client is authorized to
+        signal the filtering rules and if the client is authorized propagates
+        the rules to the DOTS server. Likewise, the DOTS server validates if
+        the DOTS gateway is authorized to signal the filtering rules. To
+        create or purge filters, the DOTS client sends HTTP requests to its
+        DOTS gateway. The DOTS gateway validates the rules in the requests and
+        proxies the requests containing the filtering rules to a DOTS server.
+        When the DOTS gateway receives the associated HTTP response from the
+        DOTS server, it propagates the response back to the DOTS client.</t>
 
         <t>The following APIs define means for a DOTS client to configure
         filtering rules on a DOTS server.</t>
@@ -1097,6 +1190,11 @@ Content-Format: "application/yang.api+json"
       injected by an attacker will be rejected by the TCP-AO integrity check
       and therefore will never reach the TLS layer.</t>
 
+      <t>In order to prevent leaking internal information outside a
+      client-domain, DOTS gateways located in the client-domain SHOULD NOT
+      reveal the identity of internal DOTS clients (client-identifier) unless
+      explicitly configured to do so.</t>
+
       <t>Special care should be taken in order to ensure that the activation
       of the proposed mechanism won't have an impact on the stability of the
       network (including connectivity and services delivered over that
@@ -1112,9 +1210,9 @@ Content-Format: "application/yang.api+json"
     </section>
 
     <section anchor="ack" title="Acknowledgements">
-      <t>Thanks to Christian Jacquenet, Roland Dobbins, Andrew Mortensen,
-      Roman Danyliw, Ehud Doron, Russ White, Jon Shallow, and Gilbert Clark
-      for the discussion and comments.</t>
+      <t>Thanks to Christian Jacquenet, Roland Dobbins, Roman Danyliw, Ehud
+      Doron, Russ White, Jon Shallow, and Gilbert Clark for the discussion and
+      comments.</t>
     </section>
   </middle>
 
@@ -1132,6 +1230,8 @@ Content-Format: "application/yang.api+json"
       <?rfc include="reference.I-D.ietf-dots-architecture"?>
 
       <?rfc include="reference.I-D.ietf-netmod-acl-model"?>
+
+      <?rfc include="reference.I-D.ietf-dots-signal-channel"?>
 
       <?rfc include="reference.RFC.5246"?>
 
@@ -1153,7 +1253,7 @@ Content-Format: "application/yang.api+json"
 
       <?rfc include="reference.I-D.ietf-dots-requirements"?>
 
-      <?rfc include="reference.I-D.ietf-dots-signal-channel"?>
+      <?rfc include='reference.I-D.ietf-netmod-yang-tree-diagrams'?>
 
       <reference anchor="IEEE.754.1985">
         <front>
