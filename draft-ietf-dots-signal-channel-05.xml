@@ -669,7 +669,7 @@ module ietf-dots-signal-config {
               fraction-digits 2;
               }
 
-             default 1.1;
+             default 1.5;
 
               description 
                    "Random factor used to influence the timing of
@@ -1550,8 +1550,8 @@ A1                                      # map(1)
                             "MaxValue" : 30, 
                            },
      "ack-random-factor": {
-                            "CurrentValue": 1.1,
-                            "MinValue": 1.0, 
+                            "CurrentValue": 1.5,
+                            "MinValue": 1.1, 
                             "MaxValue" : 4.0, 
                            }
   }
@@ -1565,7 +1565,7 @@ A1                                      # map(1)
           retransmissions). Message transmission parameters for CoAP are
           defined in Section 4.8 of <xref target="RFC7252"></xref>. The
           RECOMMENDED values of transmission parameter values are ack_timeout
-          (2 seconds), max-retransmit (3), ack-random-factor (1.1). In
+          (2 seconds), max-retransmit (3), ack-random-factor (1.5). In
           addition to those parameters, the RECOMMENDED specific DOTS
           transmission parameter values are heartbeat-interval (30 seconds)
           and missing-hb-allowed (5).<list style="empty">
@@ -1596,7 +1596,7 @@ A1                                      # map(1)
           then it concludes that the DOTS signal channel session is
           disconnected, and a "CoAP ping" confirmable message is retransmitted
           three (max-retransmit) times using an initial timeout set to a
-          random duration between 2 (ack_timeout) and 2.2 seconds
+          random duration between 2 (ack_timeout) and 3 seconds
           (ack-timeout*ack-random-factor) and exponential back-off between
           retransmissions.</t>
 
@@ -2594,7 +2594,7 @@ A1                                      # map(1)
       <t>In order to prevent leaking internal information outside a
       client-domain, DOTS gateways located in the client-domain SHOULD NOT
       reveal the identity of internal DOTS clients (client-identifier) unless
-      explicitly configured to do so. </t>
+      explicitly configured to do so.</t>
 
       <t>Special care should be taken in order to ensure that the activation
       of the proposed mechanism won't have an impact on the stability of the
