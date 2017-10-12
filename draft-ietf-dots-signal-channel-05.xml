@@ -1885,8 +1885,8 @@ A1                                      # map(1)
         DOTS agent sends a Ping message and the peer DOTS agent would respond
         by sending a single Pong message.</t>
 
-        <t>A DOTS client MUST NOT transmit a heartbeat message, while a
-        previous heartbeat messages has not been responded by the remote DOTS
+        <t>A DOTS client MUST NOT transmit a heartbeat message while a
+        previous heartbeat message has not been responded by the remote DOTS
         server.</t>
       </section>
     </section>
@@ -2591,6 +2591,11 @@ A1                                      # map(1)
       bogus packets injected by an attacker will be rejected by the TCP-AO
       integrity check and therefore will never reach the TLS layer.</t>
 
+      <t>In order to prevent leaking internal information outside a
+      client-domain, DOTS gateways located in the client-domain SHOULD NOT
+      reveal the identity of internal DOTS clients (client-identifier) unless
+      explicitly configured to do so. </t>
+
       <t>Special care should be taken in order to ensure that the activation
       of the proposed mechanism won't have an impact on the stability of the
       network (including connectivity and services delivered over that
@@ -2618,10 +2623,9 @@ A1                                      # map(1)
     </section>
 
     <section anchor="ack" title="Acknowledgements">
-      <t>Thanks to Christian Jacquenet, Roland Dobbins, Andrew Mortensen,
-      Roman D. Danyliw, Michael Richardson, Ehud Doron, Kaname Nishizuka, Dave
-      Dolson, Liang Xia, Jon Shallow, and Gilbert Clark for the discussion and
-      comments.</t>
+      <t>Thanks to Christian Jacquenet, Roland Dobbins, Roman D. Danyliw,
+      Michael Richardson, Ehud Doron, Kaname Nishizuka, Dave Dolson, Liang
+      Xia, Jon Shallow, and Gilbert Clark for the discussion and comments.</t>
     </section>
   </middle>
 

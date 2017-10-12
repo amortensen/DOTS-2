@@ -2203,8 +2203,8 @@ Internet-Draft             DOTS Signal Channel              October 2017
    Ping message and the peer DOTS agent would respond by sending a
    single Pong message.
 
-   A DOTS client MUST NOT transmit a heartbeat message, while a previous
-   heartbeat messages has not been responded by the remote DOTS server.
+   A DOTS client MUST NOT transmit a heartbeat message while a previous
+   heartbeat message has not been responded by the remote DOTS server.
 
 6.  Mapping parameters to CBOR
 
@@ -2889,6 +2889,11 @@ Internet-Draft             DOTS Signal Channel              October 2017
    any bogus packets injected by an attacker will be rejected by the
    TCP-AO integrity check and therefore will never reach the TLS layer.
 
+   In order to prevent leaking internal information outside a client-
+   domain, DOTS gateways located in the client-domain SHOULD NOT reveal
+   the identity of internal DOTS clients (client-identifier) unless
+   explicitly configured to do so.
+
    Special care should be taken in order to ensure that the activation
    of the proposed mechanism won't have an impact on the stability of
    the network (including connectivity and services delivered over that
@@ -2901,11 +2906,6 @@ Internet-Draft             DOTS Signal Channel              October 2017
    deleting filtering rules.  Nevertheless, attacks can be initiated
    from within the trusted domain if an entity has been corrupted.
    Adequate means to monitor trusted nodes should also be enabled.
-
-
-
-
-
 
 
 
@@ -2928,10 +2928,9 @@ Internet-Draft             DOTS Signal Channel              October 2017
 
 14.  Acknowledgements
 
-   Thanks to Christian Jacquenet, Roland Dobbins, Andrew Mortensen,
-   Roman D.  Danyliw, Michael Richardson, Ehud Doron, Kaname Nishizuka,
-   Dave Dolson, Liang Xia, Jon Shallow, and Gilbert Clark for the
-   discussion and comments.
+   Thanks to Christian Jacquenet, Roland Dobbins, Roman D.  Danyliw,
+   Michael Richardson, Ehud Doron, Kaname Nishizuka, Dave Dolson, Liang
+   Xia, Jon Shallow, and Gilbert Clark for the discussion and comments.
 
 15.  References
 
@@ -2962,6 +2961,7 @@ Internet-Draft             DOTS Signal Channel              October 2017
               (SHA and SHA-based HMAC and HKDF)", RFC 6234,
               DOI 10.17487/RFC6234, May 2011,
               <https://www.rfc-editor.org/info/rfc6234>.
+
 
 
 
