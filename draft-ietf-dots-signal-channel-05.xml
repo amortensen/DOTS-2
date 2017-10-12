@@ -1154,6 +1154,7 @@ A1                                      # map(1)
      "scope": [
         {
           "mitigation-id": 12332,  
+          "mitigation-start": 1507818434.00,
           "target-protocol": [
               17
            ],
@@ -1166,6 +1167,7 @@ A1                                      # map(1)
          }, 
         {
           "mitigation-id": 12333,  
+          "mitigation-start": 1507818393.00, 
           "target-protocol": [
               6
            ],
